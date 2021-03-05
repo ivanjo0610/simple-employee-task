@@ -89,6 +89,7 @@ exports.GetAverageSalaryByTitle = (req, res) => {
     })
 }
 
+//this is the precision method for GetAverageSalaryByTitle, but the processing time is slower
 exports.GetPreciseAverageSalaryByTitle = (req, res) => {
     console.log("get average salary by title hitted")
 
