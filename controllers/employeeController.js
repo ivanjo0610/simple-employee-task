@@ -1,4 +1,5 @@
 const titleModel = require('../models/titleModel')
+const employeeModel = require('../models/employeeModel')
 
 const redisConfig = require('../config/redis')
 const queue = require('bull')
@@ -88,9 +89,76 @@ exports.GetAverageSalaryByTitle = (req, res) => {
     })
 }
 
+exports.GetPreciseAverageSalaryByTitle = (req, res) => {
+    console.log("get average salary by title hitted")
+
+    try{
+        pool.getConnection((err, connection) => {
+            if(err){
+                throw err
+            }
+
+            let resultEmployees = employeeModel.GetEmployees2(connection)
+            let list = {}
+            let data = []
+    
+            resultEmployees
+                .on('error', function(err) {
+                    throw err
+                })
+                .on('result', function(row) {
+                    connection.pause()
+
+                    let getLatestSalaryAndTitle = employeeModel.GetLatestSalaryAndTitle(pool, row.emp_no)
+                    getLatestSalaryAndTitle.then(function(result){
+                        let [res] = result
+                        if(list.hasOwnProperty(res.title)){
+                            list[res.title].totalSalary += res.salary
+                            list[res.title].employeeCount++
+                        }else{
+                            list[res.title] = {
+                                totalSalary: res.salary,
+                                employeeCount: 1
+                            }
+                        }
+                    })
+                    .catch(function(err){
+                        throw err
+                    })
+
+                    connection.resume()
+                })
+                .on('end', function(){
+                    for (var key in list) {
+                        let dt = {
+                            label: key,
+                            y: Math.floor(list[key].totalSalary / list[key].employeeCount)
+                        }
+            
+                        data.push(dt)
+                    }
+
+                    console.log("done")
+                    connection.release()
+
+                    res.status(200).json({
+                        success: true,
+                        message: data
+                    })
+                })
+        })
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: err
+        })
+    }
+}
+
 exports.GetAverageAgeByTitle = (req, res) => {
     console.log("get average age by title hitted")
-    
+
     //precision method will be select all employee -> get latest title & salary from each employee -> add it to an array with title as key
     let getTotalAgeByTitle = titleModel.GetTotalAgeByTitle(pool)
     getTotalAgeByTitle.then(function(result){

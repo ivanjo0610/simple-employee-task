@@ -40,3 +40,27 @@ exports.GetEmployeesDetail = (pool) => {
 
     return pool.query(sql);
 }
+
+exports.GetLatestSalaryAndTitle = (pool, emp_no) => {
+    return new Promise(function(resolve, reject) {
+        var sql = `
+            select 
+                s.salary,
+                t.title
+            from 
+                salaries s,
+                titles t
+            where 
+                s.emp_no = ${emp_no} AND
+                t.emp_no = ${emp_no} AND
+                s.to_date = (select max(to_date) from salaries where emp_no = ${emp_no}) AND
+                t.to_date = (select max(to_date) from titles where emp_no = ${emp_no})
+        `;
+
+        pool.query(sql, (err, result)=> {
+            if (err) reject(err);
+
+            resolve(result);
+        });
+    })
+}

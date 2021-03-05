@@ -19,7 +19,7 @@ app.post('/employee/absence/generate', employeeController.ProduceGenerateAbsence
 app.post('/employee/leave/generate', employeeController.ProduceGenerateLeave)
 app.post('/employee/salary/generate', employeeController.ProduceGenerateNewSalary)
 
-app.get('/employee/average_salary_by_title', employeeController.GetAverageSalaryByTitle)
+app.get('/employee/average_salary_by_title', employeeController.GetPreciseAverageSalaryByTitle)
 app.get('/employee/average_age_by_title', employeeController.GetAverageAgeByTitle)
 
 var server = app.listen(8081, function(){
