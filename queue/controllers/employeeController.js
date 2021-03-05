@@ -3,7 +3,7 @@ const absenceModel = require('../../models/absenceModel')
 const leaveModel = require('../../models/leaveModel')
 const salaryModel = require('../../models/salaryModel')
 
-const dateLib = require('../../lib/date')
+const dateHelper = require('../../helper/date')
 
 const pool = require('../../config/db')
 const e = require('express')
@@ -191,7 +191,7 @@ exports.generateNewSalaryFunction = (covidToggle) => {
                             console.log(`Employee total working hour: ${result[0].total_working_hour}`)
                             console.log(`Employee total break time: ${result[0].total_break_time}`)
 
-                            if(dateLib.formatSQLDate(Date.now()) != row.from_date){
+                            if(dateHelper.formatSQLDate(Date.now()) != row.from_date){
                                 let raise_percentage = 0
                                 let raise = 0
                                 let average_working_hour = (result[0].total_working_hour / result[0].working_day) / 3600
