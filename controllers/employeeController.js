@@ -64,8 +64,8 @@ exports.GetAverageSalaryByTitle = (req, res) => {
         let data = []
         for(x = 0;x < result.length; x++){
             let dt = {
-                title: result[x].title,
-                averageSalary: Math.floor(result[x].totalSalary / result[x].employeeCount)
+                label: result[x].title,
+                y: Math.floor(result[x].totalSalary / result[x].employeeCount)
             }
 
             data.push(dt)
@@ -93,8 +93,8 @@ exports.GetAverageAgeByTitle = (req, res) => {
         let data = []
         for(x = 0;x < result.length; x++){
             let dt = {
-                title: result[x].title,
-                averageAge: Math.floor(result[x].totalAge / result[x].employeeCount)
+                label: result[x].title,
+                y: Math.floor(result[x].totalAge / result[x].employeeCount)
             }
 
             data.push(dt)
