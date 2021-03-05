@@ -59,6 +59,8 @@ exports.ProduceGenerateNewSalary = (req, res) => {
 
 exports.GetAverageSalaryByTitle = (req, res) => {
     console.log("get average salary by title hitted")
+
+    //precision method will be select all employee -> get latest title & salary from each employee -> add it to an array with title as key
     let getTotalSalaryByTitle = titleModel.GetTotalSalaryByTitle(pool)
     getTotalSalaryByTitle.then(function(result){
         let data = []
@@ -88,6 +90,8 @@ exports.GetAverageSalaryByTitle = (req, res) => {
 
 exports.GetAverageAgeByTitle = (req, res) => {
     console.log("get average age by title hitted")
+    
+    //precision method will be select all employee -> get latest title & salary from each employee -> add it to an array with title as key
     let getTotalAgeByTitle = titleModel.GetTotalAgeByTitle(pool)
     getTotalAgeByTitle.then(function(result){
         let data = []
